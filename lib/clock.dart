@@ -1,18 +1,38 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fitness_app/member_info.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'dart:async';
 
+import 'home.dart';
+
+
 class SetTimer extends StatefulWidget { // 状態を持ちたいので StatefulWidget を継承
   @override
-  _TimerPageState createState() => _TimerPageState();
+  TimerPageState createState() => TimerPageState();
 }
 
-class _TimerPageState extends State<SetTimer> {
+class TimerPageState extends State<SetTimer> {
   late Timer _timer; // この辺が状態
   late DateTime _time;
   int set = 1; // set数
   int seconds = 60; //60秒でTimerストップ
+
+  Future<int> futureDay() async {
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+    int day = 0;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .get()
+        .then((DocumentSnapshot document) {
+      Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
+      day = data['day_count'];
+    });
+    return day;
+  }
 
   @override
   void initState() { // 初期化処理
@@ -31,38 +51,9 @@ class _TimerPageState extends State<SetTimer> {
             ),
             Container(
               margin: EdgeInsets.only(left: 50),
-              child: ElevatedButton(
-                child: Text(
-                  'Finish',
-                  style: TextStyle(fontSize: 20),
-                ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                ),
-                onPressed: () { // Finishボタンタップ時の処理
-                  _timer = Timer.periodic(
-                    Duration(seconds: 1), // 1秒毎に定期実行
-                        (Timer timer) {
-                      setState(() { // 変更を画面に反映するため、setState()している
-                        //_time = _time.add(Duration(seconds: 1));
-                        _time = DateTime.utc(0, 0, 0, 0, 0, seconds);
-                        seconds--;
-                        if (seconds == -1) {
-                          FlutterRingtonePlayer.playNotification(
-                            volume: 0.1,
-                          );
-                          set = set + 1;
-                          seconds = 60;
-                          _time = DateTime.utc(0, 0, 0, 0, 1, 0);
-                          _timer.cancel();
-                          if (set == 5) {
-                            Navigator.pop(context);
-                          }
-                        }
-                      });
-                    },
-                  );
-                },
+              child: FutureBuilder(
+                future: futureDay(),
+                builder: _buildChild,
               ),
             ),
           ]),
@@ -75,6 +66,57 @@ class _TimerPageState extends State<SetTimer> {
           )
         ])
     );
+  }
+
+  Widget _buildChild(BuildContext context, AsyncSnapshot<Object?> snapshot) {
+    int? day2 = snapshot.data as int?;
+    int day3 = day2! + 1;
+
+    String uid = FirebaseAuth.instance.currentUser!.uid;
+
+    if (snapshot.hasData) {
+      return ElevatedButton(
+        child: Text(
+          'Finish',
+          style: TextStyle(fontSize: 20),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.blue,
+        ),
+        onPressed: () { // Finishボタンタップ時の処理
+          _timer = Timer.periodic(
+            Duration(seconds: 1), // 1秒毎に定期実行
+                (Timer timer) {
+              setState(() { // 変更を画面に反映するため、setState()している
+                _time = DateTime.utc(0, 0, 0, 0, 0, seconds);
+                seconds--;
+                if (seconds == -1) {
+                  FlutterRingtonePlayer.playNotification(
+                    volume: 0.1,
+                  );
+                  set = set + 1;
+                  seconds = 60;
+                  _time = DateTime.utc(0, 0, 0, 0, 1, 0);
+                  _timer.cancel();
+                  if (set == 2) {
+                    FirebaseFirestore.instance.collection('users').doc(uid).update({'day_count': day3});
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Home()),
+                    );
+                  }
+                }
+              });
+            },
+          );
+        },
+      );
+    }
+    else {
+      // データが確定しない場合に表示するウィジェットの作成処理
+      return Text("hoge");
+    }
   }
 }
 

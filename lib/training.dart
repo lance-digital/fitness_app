@@ -7,7 +7,6 @@ class TrainingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        //padding: const EdgeInsets.all(30.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
@@ -19,7 +18,7 @@ class TrainingScreen extends StatelessWidget {
                     Container(
                       margin: EdgeInsets.only(top: 20, bottom: 20),
                       alignment: Alignment.center,
-                      child: Image.asset('images/squat.png'),
+                      child: Image.asset('images/bench_tsuchida.png'),
                     ),
                   ],
                 ),
