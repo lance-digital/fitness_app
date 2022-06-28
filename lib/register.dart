@@ -98,6 +98,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'bench': "",
                       'dead': "",
                       'squat': "",
+                      'day_count': 0,
                     });
                   } catch (e) {
                     // 登録に失敗した場合

@@ -34,7 +34,7 @@ class MessageWidget extends StatelessWidget {
             vertical: 8.0,
           ),
           leading: ClipOval(
-              child: Image.asset('images//mother.png')
+              child: Image.asset('images/mother.png')
           ),
           trailing: Text('15分前'),
           title: Text('気合'),
@@ -46,7 +46,7 @@ class MessageWidget extends StatelessWidget {
             vertical: 8.0,
           ),
           leading: ClipOval(
-              child: Image.asset('images//kokubo.png')
+              child: Image.asset('images/kokubo.png')
           ),
           trailing: Text('3分前'),
           title: Text('ありがとうございます'),
@@ -58,7 +58,7 @@ class MessageWidget extends StatelessWidget {
             vertical: 8.0,
           ),
           leading: ClipOval(
-              child: Image.asset('images//mother.png')
+              child: Image.asset('images/mother.png')
           ),
           trailing: Text('1分前'),
           title: Text('ファイト！'),

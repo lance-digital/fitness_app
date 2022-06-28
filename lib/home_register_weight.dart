@@ -76,7 +76,7 @@ class HomeRegisterWeightRecordPageState extends State<HomeRegisterWeightRecordPa
               ElevatedButton(
                 onPressed: () async {
                   await doc.update({
-                    'day_count': 0,
+                    //'day_count': 0,
                     'bench': BenchPress,
                     'dead': Deadlift,
                     'squat': Squat,

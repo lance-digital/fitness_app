@@ -104,9 +104,6 @@ class Home extends StatelessWidget {
                   ),
                 ),
               ]),
-              Container(
-                child: _start(context),
-              ),
             ]),
           ],
         ),
@@ -115,13 +112,13 @@ class Home extends StatelessWidget {
   }
 
   Widget _buildChildDay(BuildContext context, AsyncSnapshot<Object?> snapshot) {
-    int? day2 = snapshot.data as int?;
-    String day3 = (day2! + 1).toString();
-
-    bench_count = benchMenu(day2).cnt;
-    bench_set = benchMenu(day2).set;
-
     if (snapshot.hasData) {
+      int? day2 = snapshot.data as int?;
+      String day3 = (day2! + 1).toString();
+
+      bench_count = benchMenu(day2).cnt;
+      bench_set = benchMenu(day2).set;
+
       return Text("day" + day3, style: TextStyle(fontSize: 20));
     }
     else {
@@ -206,44 +203,33 @@ class Home extends StatelessWidget {
                 ),
               ),
             ),
+            Padding(
+              padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
+              child: ElevatedButton(
+                child: Text(
+                  'start',
+                  style: TextStyle(fontSize: 20),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TrainingScreen()),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       );
     }
     else {
       // データが確定しない場合に表示するウィジェットの作成処理
-      return Text("hoge");
+      return Text("");
     }
-  }
-
-  Widget _start(BuildContext context) {
-    return Padding(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(20, 0, 0, 0),
-            child: ElevatedButton(
-              child: Text(
-                'start',
-                style: TextStyle(fontSize: 20),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue,
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const TrainingScreen()),
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
   }
 
   Widget _buildChildBench(BuildContext context, AsyncSnapshot<Object?> snapshot) {
@@ -326,7 +312,7 @@ class Home extends StatelessWidget {
     }
     else {
       // データが確定しない場合に表示するウィジェットの作成処理
-      return Text("hoge");
+      return Text("");
     }
   }
 }
